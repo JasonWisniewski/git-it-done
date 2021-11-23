@@ -19,13 +19,18 @@ var formSubmitHandler = function(event) {
 
 var getUserRepos = function(user) {
   // format the github api url
-  var apiUrl = "https://api.github.com/users/" + user + "/repos";
+  var x = "https://api.github.com/users/" + user + "/repos";
 
   // make request to the url
   fetch(apiUrl).then(function(response){
     if (response.ok) {
       response.json().then(function(data) {
-        displayRepos(data, user);
+        displayRepos(data);
+        
+        // check if api has paginated issues
+        if (response.headers.get("Link")) {
+          console.log("repo has more than 30 issues")
+        }
       });
     } else {
       alert("Error: GitHub User Not Found");
